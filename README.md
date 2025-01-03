@@ -101,7 +101,7 @@ public class Example {
 
 It is also worth clarifying that the ChangeListener will be called without calling the get() method every time:
 ```java
-    public static void main(String[] args) throws IOException, InterruptedException {
+public static void main(String[] args) throws IOException, InterruptedException {
     ConfigManager configManager = new ConfigManager();
     ConfigNode config = configManager.load(new File("./config.json"));
 
