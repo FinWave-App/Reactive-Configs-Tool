@@ -55,6 +55,66 @@ public static void main(String[] args) throws IOException {
 }
 ```
 
+Another example, but now we will more explicitly monitor the parameter changes from the config file.
+
+```java
+import app.finwave.rct.config.ConfigManager;
+import app.finwave.rct.config.ConfigNode;
+import app.finwave.rct.reactive.property.Property;
+
+import java.io.File;
+import java.io.IOException;
+
+public class Example {
+    public static void main(String[] args) throws IOException {
+        ConfigManager configManager = new ConfigManager();
+        ConfigNode config = configManager.load(new File("./config.json"));
+        
+        Property<String> textToPrint = config.getAsString("textToPrint");
+
+        // Add a change listener to react to updates in the configuration
+        textToPrint.addChangeListener(newValue -> {
+            System.out.println("New value: " + newValue);
+        });
+
+        // Continuously check the current value in an infinite loop
+        while (true) {
+            // Print the current value from the property
+            System.out.println("Current value: " + textToPrint.get());
+
+            /*
+             * Note: The get() method provides the latest cached value of the property.
+             * It does not read from the configuration file each time it's called.
+             */
+            
+            // Sleep for demonstration purposes (e.g., waiting for external changes)
+            try {
+                Thread.sleep(5000); // Wait for 5 seconds before checking again
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+    }
+}
+```
+
+It is also worth clarifying that the ChangeListener will be called without calling the get() method every time:
+```java
+    public static void main(String[] args) throws IOException, InterruptedException {
+    ConfigManager configManager = new ConfigManager();
+    ConfigNode config = configManager.load(new File("./config.json"));
+
+    Property<String> textToPrint = config.getAsString("textToPrint");
+
+    textToPrint.addChangeListener(newValue -> {
+        System.out.println("New value: " + newValue);
+    });
+
+    Thread.sleep(50000);
+}
+```
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit issues or pull requests.
