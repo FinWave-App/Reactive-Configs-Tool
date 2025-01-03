@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'su.knst.rct'
+group = 'app.finwave.rct'
 version = '1.0.0'
 
 repositories {
