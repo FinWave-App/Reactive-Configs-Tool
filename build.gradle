@@ -1,0 +1,84 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'su.knst.rct'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api 'com.google.code.gson:gson:2.11.0'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            groupId = project.group
+            artifactId = 'rct'
+            version = project.version
+
+            pom {
+                name = 'ReactiveConfigsTool'
+                description = 'Java library what provides a reactive approach to working with configuration files'
+                url = 'https://github.com/FinWave-App/Reactive-Configs-Tool'
+
+                licenses {
+                    license {
+                        name = 'MIT license'
+                        url = 'https://raw.githubusercontent.com/FinWave-App/Reactive-Configs-Tool/main/LICENSE'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'knst'
+                        name = 'isKONSTANTIN'
+                        email = 'me@knst.su'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:git://github.com/FinWave-App/Reactive-Configs-Tool.git'
+                    developerConnection = 'scm:git:ssh://github.com:FinWave-App/Reactive-Configs-Tool.git'
+                    url = 'https://github.com/FinWave-App/Reactive-Configs-Tool'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "FinWaveNexus"
+            url = "https://nexus.finwave.app/repository/maven-public"
+            credentials {
+                username = System.getenv("NEXUS_DEPLOY_USERNAME")
+                password = System.getenv("NEXUS_DEPLOY_PASSWORD")
+            }
+        }
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/finwave-app/reactive-configs-tool"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
