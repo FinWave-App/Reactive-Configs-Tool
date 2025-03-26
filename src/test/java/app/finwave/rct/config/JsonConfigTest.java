@@ -59,6 +59,13 @@ public class JsonConfigTest {
         var floatV = rootNode.getAsFloat("float");
         var longV = rootNode.getAsLong("long");
 
+        assertFalse(rootNode.exists("string"));
+        assertFalse(rootNode.exists("integer"));
+        assertFalse(rootNode.exists("bool"));
+        assertFalse(rootNode.exists("double"));
+        assertFalse(rootNode.exists("float"));
+        assertFalse(rootNode.exists("long"));
+
         assertNull(string.get());
         assertNull(integer.get());
         assertNull(bool.get());
@@ -74,6 +81,13 @@ public class JsonConfigTest {
         assertEquals(0.123, doubleV.getOr(0.123));
         assertEquals(0.123f, floatV.getOr(0.123f));
         assertEquals(5290234L, longV.getOr(5290234L));
+
+        assertTrue(rootNode.exists("string"));
+        assertTrue(rootNode.exists("integer"));
+        assertTrue(rootNode.exists("bool"));
+        assertTrue(rootNode.exists("double"));
+        assertTrue(rootNode.exists("float"));
+        assertTrue(rootNode.exists("long"));
 
         assertEquals(
                 "{\"string\":\"Hello, world!\",\"integer\":123,\"bool\":true,\"double\":0.123,\"float\":0.123,\"long\":5290234}",
@@ -178,6 +192,14 @@ public class JsonConfigTest {
                         "\"sub\":{\"anotherString\":\"Another string\",\"anotherInteger\":999,\"string\":\"hello\",\"integer\":541,\"bool\":false}}",
                 readFile()
         );
+    }
+
+    @Test
+    @Order(7)
+    void nodeExists() {
+        assertTrue(rootNode.exists("anotherString"));
+        assertFalse(rootNode.node("test").exists("notExists"));
+        assertTrue(rootNode.node("sub").exists("anotherString"));
     }
 
     static class TestClass {

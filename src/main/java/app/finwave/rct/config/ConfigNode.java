@@ -46,4 +46,9 @@ public interface ConfigNode {
      * Provide subnode from this node.
      */
     ConfigNode node(String key);
+
+    /**
+     * Check key is existing.
+     */
+    boolean exists(String key);
 }

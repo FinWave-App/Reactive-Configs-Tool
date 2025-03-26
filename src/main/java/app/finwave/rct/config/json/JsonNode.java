@@ -54,6 +54,15 @@ public class JsonNode implements ConfigNode {
         );
     }
 
+    @Override
+    public boolean exists(String key) {
+        JsonElement element = object.get();
+        if (element == null)
+            return false;
+
+        return !element.isJsonNull() && element.isJsonObject() && element.getAsJsonObject().has(key);
+    }
+
     protected <X> X mapElement(JsonObject obj, String key, Function<JsonElement, X> mapper) {
         JsonElement element = obj.get(key);
         if (element == null)
